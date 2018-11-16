@@ -6,48 +6,50 @@
 var DESIGN_PREFIX = '_design/';
 
 function main(message) {
-  var cloudantOrError = getCloudantAccount(message);
-  if (typeof cloudantOrError !== 'object') {
-    return Promise.reject(cloudantOrError);
-  }
-  var cloudant = cloudantOrError;
-  var dbName = message.dbname;
-  var docId = message.docid;
-  var viewName = message.viewname;
-  var params = {};
 
-  if(!dbName) {
-    return Promise.reject('dbname is required.');
-  }
-  if(!docId) {
-    return Promise.reject('docid is required.');
-  }
-  var cloudantDb = cloudant.use(dbName);
-
-  if(!viewName) {
-    return Promise.reject('viewname is required.');
-  }
-  if (typeof message.params === 'object') {
-    params = message.params;
-  } else if (typeof message.params === 'string') {
-    try {
-      params = JSON.parse(message.params);
-    } catch (e) {
-      return Promise.reject('params field cannot be parsed. Ensure it is valid JSON.');
+    var cloudantOrError = getCloudantAccount(message);
+    if (typeof cloudantOrError !== 'object') {
+        return Promise.reject(cloudantOrError);
     }
-  }
+    var cloudant = cloudantOrError;
 
-  return deleteViewFromDesignDoc(cloudantDb, docId, viewName, params);
+    var dbName = message.dbname;
+    var docId = message.docid;
+    var viewName = message.viewname;
+    var params = {};
+
+    if (!dbName) {
+        return Promise.reject('dbname is required.');
+    }
+    if (!docId) {
+        return Promise.reject('docid is required.');
+    }
+    var cloudantDb = cloudant.use(dbName);
+
+    if (!viewName) {
+        return Promise.reject('viewname is required.');
+    }
+    if (typeof message.params === 'object') {
+        params = message.params;
+    } else if (typeof message.params === 'string') {
+        try {
+            params = JSON.parse(message.params);
+        } catch (e) {
+            return Promise.reject('params field cannot be parsed. Ensure it is valid JSON.');
+        }
+    }
+
+    return deleteViewFromDesignDoc(cloudantDb, docId, viewName, params);
 }
 
 function deleteViewFromDesignDoc(cloudantDb, docId, viewName, params) {
-  //Check that doc id contains _design prefix
-  if (docId.indexOf(DESIGN_PREFIX) !== 0) {
-    docId = DESIGN_PREFIX + docId;
-  }
+    //Check that doc id contains _design prefix
+    if (docId.indexOf(DESIGN_PREFIX) !== 0) {
+        docId = DESIGN_PREFIX + docId;
+    }
 
-  return getDocument(cloudantDb, docId)
-    .then(function(document) {
+    return getDocument(cloudantDb, docId)
+    .then(function (document) {
         console.log("Got document: " + document);
         delete document.views[viewName];
 
@@ -57,56 +59,92 @@ function deleteViewFromDesignDoc(cloudantDb, docId, viewName, params) {
 }
 
 function getDocument(cloudantDb, docId) {
-  return new Promise(function(resolve, reject) {
-    cloudantDb.get(docId, function(error, response) {
-      if (!error) {
-        console.log("Got response: " + response);
-        resolve(response);
-      } else {
-        console.log("Got error: " + error);
-        reject(error);
-      }
+    return new Promise(function (resolve, reject) {
+        cloudantDb.get(docId, function (error, response) {
+            if (!error) {
+                console.log("Got response: " + response);
+                resolve(response);
+            } else {
+                console.log("Got error: " + error);
+                reject(error);
+            }
+        });
     });
-  });
 }
 
 function insert(cloudantDb, doc, params) {
-  return new Promise(function(resolve, reject) {
-    cloudantDb.insert(doc, params, function(error, response) {
-      if (!error) {
-        console.log('success', response);
-        resolve(response);
-      } else {
-        console.log('error', error);
-        reject(error);
-      }
+    return new Promise(function (resolve, reject) {
+        cloudantDb.insert(doc, params, function (error, response) {
+            if (!error) {
+                console.log('success', response);
+                resolve(response);
+            } else {
+                console.log('error', error);
+                reject(error);
+            }
+        });
     });
-  });
 }
 
-function getCloudantAccount(message) {
-  // full cloudant URL - Cloudant NPM package has issues creating valid URLs
-  // when the username contains dashes (common in Bluemix scenarios)
-  var cloudantUrl;
+function getCloudantAccount(params) {
 
-  if (message.url) {
-    // use bluemix binding
-    cloudantUrl = message.url;
-  } else {
-    if (!message.host) {
-      return 'cloudant account host is required.';
+    var Cloudant = require('@cloudant/cloudant');
+    var cloudant;
+
+    if (!params.iamApiKey && params.url) {
+        cloudant = Cloudant(params.url);
+    } else {
+        checkForBXCreds(params);
+
+        if (!params.host) {
+            return 'Cloudant account host is required.';
+        }
+
+        if (!params.iamApiKey) {
+            if (!params.username || !params.password) {
+                return 'You must specify parameter/s of iamApiKey or username/password';
+            }
+        }
+
+        var protocol = params.protocol || 'https';
+        if (params.iamApiKey) {
+            var dbURL = `${protocol}://${params.host}`;
+            if (params.port) {
+                dbURL += ':' + params.port;
+            }
+            cloudant = new Cloudant({
+                url: dbURL,
+                plugins: {iamauth: {iamApiKey: params.iamApiKey, iamTokenUrl: params.iamUrl}}
+            });
+        } else {
+            var url = `${protocol}://${params.username}:${params.password}@${params.host}`;
+            if (params.port) {
+                url += ':' + params.port;
+            }
+            cloudant = Cloudant(url);
+        }
     }
-    if (!message.username) {
-      return 'cloudant account username is required.';
-    }
-    if (!message.password) {
-      return 'cloudant account password is required.';
+    return cloudant;
+}
+
+function checkForBXCreds(params) {
+
+    if (params.__bx_creds && params.__bx_creds.cloudantNoSQLDB) {
+        var cloudantCreds = params.__bx_creds.cloudantNoSQLDB;
+
+        if (!params.host) {
+            params.host = cloudantCreds.host || (cloudantCreds.username + '.cloudant.com');
+        }
+        if (!params.iamApiKey && !cloudantCreds.apikey) {
+            if (!params.username) {
+                params.username = cloudantCreds.username;
+            }
+            if (!params.password) {
+                params.password = cloudantCreds.password;
+            }
+        } else if (!params.iamApiKey) {
+            params.iamApiKey = cloudantCreds.apikey;
+        }
     }
 
-    cloudantUrl = "https://" + message.username + ":" + message.password + "@" + message.host;
-  }
-
-  return require('cloudant')({
-    url: cloudantUrl
-  });
 }

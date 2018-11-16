@@ -32,7 +32,7 @@ class CloudantBindingTests extends FlatSpec
     val wskprops = WskProps()
     val wsk = new Wsk
 
-    val myCloudantCreds = CloudantUtil.Credential.makeFromVCAPFile("cloudantNoSQLDB", this.getClass.getSimpleName)
+    val myCloudantCreds = CloudantUtil.Credential.makeFromVCAPFile("cloudantNoSQLDB_iam", this.getClass.getSimpleName)
 
     behavior of "Cloudant binding"
 

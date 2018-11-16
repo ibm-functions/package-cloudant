@@ -1,14 +1,14 @@
-function main(message) {
+function main(params) {
 
-    var cloudantOrError = getCloudantAccount(message);
 
+    var cloudantOrError = getCloudantAccount(params);
     if (typeof cloudantOrError !== 'object') {
         return Promise.reject(cloudantOrError);
     }
-
     var cloudant = cloudantOrError;
-    var dbName = message.dbname;
-    var doc = message.doc;
+
+    var dbName = params.dbname;
+    var doc = params.doc;
     var overwrite;
 
     if (!dbName) {
@@ -18,11 +18,11 @@ function main(message) {
         return Promise.reject('doc is required.');
     }
 
-    if (typeof message.doc === 'object') {
-        doc = message.doc;
-    } else if (typeof message.doc === 'string') {
+    if (typeof params.doc === 'object') {
+        doc = params.doc;
+    } else if (typeof params.doc === 'string') {
         try {
-            doc = JSON.parse(message.doc);
+            doc = JSON.parse(params.doc);
         } catch (e) {
             return Promise.reject('doc field cannot be parsed. Ensure it is valid JSON.');
         }
@@ -31,10 +31,10 @@ function main(message) {
     }
 
 
-    if (typeof message.overwrite === 'boolean') {
-        overwrite = message.overwrite;
-    } else if (typeof message.overwrite === 'string') {
-        overwrite = message.overwrite.trim().toLowerCase() === 'true';
+    if (typeof params.overwrite === 'boolean') {
+        overwrite = params.overwrite;
+    } else if (typeof params.overwrite === 'string') {
+        overwrite = params.overwrite.trim().toLowerCase() === 'true';
     } else {
         overwrite = false;
     }
@@ -50,8 +50,8 @@ function main(message) {
 function insertOrUpdate(cloudantDb, overwrite, doc) {
     if (doc._id) {
         if (overwrite) {
-            return new Promise(function(resolve, reject) {
-                cloudantDb.get(doc._id, function(error, body) {
+            return new Promise(function (resolve, reject) {
+                cloudantDb.get(doc._id, function (error, body) {
                     if (!error) {
                         doc._rev = body._rev;
                         insert(cloudantDb, doc)
@@ -59,10 +59,10 @@ function insertOrUpdate(cloudantDb, overwrite, doc) {
                                 resolve(response);
                             })
                             .catch(function (err) {
-                               reject(err);
+                                reject(err);
                             });
                     } else {
-                        if(error.statusCode === 404) {
+                        if (error.statusCode === 404) {
                             // If document not found, insert it
                             insert(cloudantDb, doc)
                                 .then(function (response) {
@@ -92,8 +92,8 @@ function insertOrUpdate(cloudantDb, overwrite, doc) {
  * Inserts updated document into database.
  */
 function insert(cloudantDb, doc) {
-    return new Promise(function(resolve, reject) {
-        cloudantDb.insert(doc, function(error, response) {
+    return new Promise(function (resolve, reject) {
+        cloudantDb.insert(doc, function (error, response) {
             if (!error) {
                 console.log('success', response);
                 resolve(response);
@@ -105,29 +105,65 @@ function insert(cloudantDb, doc) {
     });
 }
 
-function getCloudantAccount(message) {
-    // full cloudant URL - Cloudant NPM package has issues creating valid URLs
-    // when the username contains dashes (common in Bluemix scenarios)
-    var cloudantUrl;
+function getCloudantAccount(params) {
 
-    if (message.url) {
-        // use bluemix binding
-        cloudantUrl = message.url;
+    var Cloudant = require('@cloudant/cloudant');
+    var cloudant;
+
+    if (!params.iamApiKey && params.url) {
+        cloudant = Cloudant(params.url);
     } else {
-        if (!message.host) {
-            return 'cloudant account host is required.';
-        }
-        if (!message.username) {
-            return 'cloudant account username is required.';
-        }
-        if (!message.password) {
-            return 'cloudant account password is required.';
+        checkForBXCreds(params);
+
+        if (!params.host) {
+            return 'Cloudant account host is required.';
         }
 
-        cloudantUrl = "https://" + message.username + ":" + message.password + "@" + message.host;
+        if (!params.iamApiKey) {
+            if (!params.username || !params.password) {
+                return 'You must specify parameter/s of iamApiKey or username/password';
+            }
+        }
+
+        var protocol = params.protocol || 'https';
+        if (params.iamApiKey) {
+            var dbURL = `${protocol}://${params.host}`;
+            if (params.port) {
+                dbURL += ':' + params.port;
+            }
+            cloudant = new Cloudant({
+                url: dbURL,
+                plugins: {iamauth: {iamApiKey: params.iamApiKey, iamTokenUrl: params.iamUrl}}
+            });
+        } else {
+            var url = `${protocol}://${params.username}:${params.password}@${params.host}`;
+            if (params.port) {
+                url += ':' + params.port;
+            }
+            cloudant = Cloudant(url);
+        }
+    }
+    return cloudant;
+}
+
+function checkForBXCreds(params) {
+
+    if (params.__bx_creds && params.__bx_creds.cloudantNoSQLDB) {
+        var cloudantCreds = params.__bx_creds.cloudantNoSQLDB;
+
+        if (!params.host) {
+            params.host = cloudantCreds.host || (cloudantCreds.username + '.cloudant.com');
+        }
+        if (!params.iamApiKey && !cloudantCreds.apikey) {
+            if (!params.username) {
+                params.username = cloudantCreds.username;
+            }
+            if (!params.password) {
+                params.password = cloudantCreds.password;
+            }
+        } else if (!params.iamApiKey) {
+            params.iamApiKey = cloudantCreds.apikey;
+        }
     }
 
-    return require('cloudant')({
-        url: cloudantUrl
-    });
 }
