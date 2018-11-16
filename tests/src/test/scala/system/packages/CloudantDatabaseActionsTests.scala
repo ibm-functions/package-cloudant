@@ -35,7 +35,7 @@ class CloudantDatabaseActionsTests extends FlatSpec
     val wskprops = WskProps()
     val wsk = new Wsk
 
-    val credential = CloudantUtil.Credential.makeFromVCAPFile("cloudantNoSQLDB", this.getClass.getSimpleName)
+    val credential = CloudantUtil.Credential.makeFromVCAPFile("cloudantNoSQLDB_iam", this.getClass.getSimpleName)
 
     behavior of "Cloudant database actions"
 
@@ -56,8 +56,7 @@ class CloudantDatabaseActionsTests extends FlatSpec
                 assetHelper.withCleaner(wsk.pkg, packageName) {
                     (pkg, name) =>
                         pkg.bind("/whisk.system/cloudant", name,
-                            Map("username" -> credential.user.toJson,
-                                "password" -> credential.password.toJson,
+                            Map("iamApiKey" -> credential.apikey.toJson,
                                 "host" -> credential.host().toJson,
                                 "dbname" -> credential.dbname.toJson))
                 }
@@ -96,8 +95,7 @@ class CloudantDatabaseActionsTests extends FlatSpec
                 assetHelper.withCleaner(wsk.pkg, packageName) {
                     (pkg, name) =>
                         pkg.bind("/whisk.system/cloudant", name,
-                            Map("username" -> credential.user.toJson,
-                                "password" -> credential.password.toJson,
+                            Map("iamApiKey" -> credential.apikey.toJson,
                                 "host" -> credential.host().toJson,
                                 "dbname" -> credential.dbname.toJson))
                 }
@@ -139,8 +137,7 @@ class CloudantDatabaseActionsTests extends FlatSpec
                 assetHelper.withCleaner(wsk.pkg, packageName) {
                     (pkg, name) =>
                         pkg.bind("/whisk.system/cloudant", name,
-                            Map("username" -> credential.user.toJson,
-                                "password" -> credential.password.toJson,
+                            Map("iamApiKey" -> credential.apikey.toJson,
                                 "host" -> credential.host().toJson,
                                 "dbname" -> credential.dbname.toJson))
                 }
@@ -182,8 +179,7 @@ class CloudantDatabaseActionsTests extends FlatSpec
                 assetHelper.withCleaner(wsk.pkg, packageName) {
                     (pkg, name) =>
                         pkg.bind("/whisk.system/cloudant", name,
-                            Map("username" -> credential.user.toJson,
-                                "password" -> credential.password.toJson,
+                            Map("iamApiKey" -> credential.apikey.toJson,
                                 "host" -> credential.host().toJson,
                                 "dbname" -> credential.dbname.toJson))
                 }
@@ -218,8 +214,7 @@ class CloudantDatabaseActionsTests extends FlatSpec
                 assetHelper.withCleaner(wsk.pkg, packageName) {
                     (pkg, name) =>
                         pkg.bind("/whisk.system/cloudant", name,
-                            Map("username" -> credential.user.toJson,
-                                "password" -> credential.password.toJson,
+                            Map("iamApiKey" -> credential.apikey.toJson,
                                 "host" -> credential.host().toJson,
                                 "dbname" -> credential.dbname.toJson))
                 }
@@ -258,8 +253,7 @@ class CloudantDatabaseActionsTests extends FlatSpec
                 assetHelper.withCleaner(wsk.pkg, packageName) {
                     (pkg, name) =>
                         pkg.bind("/whisk.system/cloudant", name,
-                            Map("username" -> credential.user.toJson,
-                                "password" -> credential.password.toJson,
+                            Map("iamApiKey" -> credential.apikey.toJson,
                                 "host" -> credential.host().toJson,
                                 "dbname" -> credential.dbname.toJson))
                 }
@@ -303,8 +297,7 @@ class CloudantDatabaseActionsTests extends FlatSpec
                 assetHelper.withCleaner(wsk.pkg, packageName) {
                     (pkg, name) =>
                         pkg.bind("/whisk.system/cloudant", name,
-                            Map("username" -> credential.user.toJson,
-                                "password" -> credential.password.toJson,
+                            Map("iamApiKey" -> credential.apikey.toJson,
                                 "host" -> credential.host().toJson,
                                 "dbname" -> credential.dbname.toJson))
                 }
@@ -344,8 +337,7 @@ class CloudantDatabaseActionsTests extends FlatSpec
                 assetHelper.withCleaner(wsk.pkg, packageName) {
                     (pkg, name) =>
                         pkg.bind("/whisk.system/cloudant", name,
-                            Map("username" -> credential.user.toJson,
-                                "password" -> credential.password.toJson,
+                            Map("iamApiKey" -> credential.apikey.toJson,
                                 "host" -> credential.host().toJson,
                                 "dbname" -> credential.dbname.toJson))
                 }
@@ -391,8 +383,7 @@ class CloudantDatabaseActionsTests extends FlatSpec
                 assetHelper.withCleaner(wsk.pkg, packageName) {
                     (pkg, name) =>
                         pkg.bind("/whisk.system/cloudant", name,
-                            Map("username" -> credential.user.toJson,
-                                "password" -> credential.password.toJson,
+                            Map("iamApiKey" -> credential.apikey.toJson,
                                 "host" -> credential.host().toJson,
                                 "dbname" -> credential.dbname.toJson))
                 }
@@ -434,8 +425,7 @@ class CloudantDatabaseActionsTests extends FlatSpec
                 assetHelper.withCleaner(wsk.pkg, packageName) {
                     (pkg, name) =>
                         pkg.bind("/whisk.system/cloudant", name,
-                            Map("username" -> credential.user.toJson,
-                                "password" -> credential.password.toJson,
+                            Map("iamApiKey" -> credential.apikey.toJson,
                                 "host" -> credential.host().toJson,
                                 "dbname" -> credential.dbname.toJson))
                 }
@@ -479,8 +469,7 @@ class CloudantDatabaseActionsTests extends FlatSpec
                 assetHelper.withCleaner(wsk.pkg, packageName) {
                     (pkg, name) =>
                         pkg.bind("/whisk.system/cloudant", name,
-                            Map("username" -> credential.user.toJson,
-                                "password" -> credential.password.toJson,
+                            Map("iamApiKey" -> credential.apikey.toJson,
                                 "host" -> credential.host().toJson,
                                 "dbname" -> credential.dbname.toJson))
                 }
@@ -519,8 +508,7 @@ class CloudantDatabaseActionsTests extends FlatSpec
                 assetHelper.withCleaner(wsk.pkg, packageName) {
                     (pkg, name) =>
                         pkg.bind("/whisk.system/cloudant", name,
-                            Map("username" -> credential.user.toJson,
-                                "password" -> credential.password.toJson,
+                            Map("iamApiKey" -> credential.apikey.toJson,
                                 "host" -> credential.host().toJson,
                                 "dbname" -> credential.dbname.toJson))
                 }
@@ -560,8 +548,7 @@ class CloudantDatabaseActionsTests extends FlatSpec
                 assetHelper.withCleaner(wsk.pkg, packageName) {
                     (pkg, name) =>
                         pkg.bind("/whisk.system/cloudant", name,
-                            Map("username" -> credential.user.toJson,
-                                "password" -> credential.password.toJson,
+                            Map("iamApiKey" -> credential.apikey.toJson,
                                 "dbname" -> credential.dbname.toJson))
                 }
                 //Create test doc
@@ -576,7 +563,7 @@ class CloudantDatabaseActionsTests extends FlatSpec
                     activation =>
                         activation.response.success shouldBe false
                         val result = activation.response.result.get
-                        result.fields.get("error") shouldBe Some(JsString("cloudant account host is required."))
+                        result.fields.get("error") shouldBe Some(JsString("Cloudant account host is required."))
                 }
             }
             finally {
@@ -600,8 +587,7 @@ class CloudantDatabaseActionsTests extends FlatSpec
                 assetHelper.withCleaner(wsk.pkg, packageName) {
                     (pkg, name) =>
                         pkg.bind("/whisk.system/cloudant", name,
-                            Map("username" -> credential.user.toJson,
-                                "password" -> credential.password.toJson,
+                            Map("iamApiKey" -> credential.apikey.toJson,
                                 "host" -> credential.host().toJson,
                                 "dbname" -> credential.dbname.toJson))
                 }
@@ -641,8 +627,7 @@ class CloudantDatabaseActionsTests extends FlatSpec
                 assetHelper.withCleaner(wsk.pkg, packageName) {
                     (pkg, name) =>
                         pkg.bind("/whisk.system/cloudant", name,
-                            Map("username" -> credential.user.toJson,
-                                "password" -> credential.password.toJson,
+                            Map("iamApiKey" -> credential.apikey.toJson,
                                 "host" -> credential.host().toJson))
                 }
 
@@ -676,8 +661,7 @@ class CloudantDatabaseActionsTests extends FlatSpec
                 assetHelper.withCleaner(wsk.pkg, packageName) {
                     (pkg, name) =>
                         pkg.bind("/whisk.system/cloudant", name,
-                            Map("username" -> credential.user.toJson,
-                                "password" -> credential.password.toJson,
+                            Map("iamApiKey" -> credential.apikey.toJson,
                                 "host" -> credential.host().toJson,
                                 "dbname" -> credential.dbname.toJson))
                 }
@@ -717,8 +701,7 @@ class CloudantDatabaseActionsTests extends FlatSpec
                 assetHelper.withCleaner(wsk.pkg, packageName) {
                     (pkg, name) =>
                         pkg.bind("/whisk.system/cloudant", name,
-                            Map("username" -> credential.user.toJson,
-                                "password" -> credential.password.toJson,
+                            Map("iamApiKey" -> credential.apikey.toJson,
                                 "host" -> credential.host().toJson,
                                 "dbname" -> credential.dbname.toJson))
                 }
@@ -752,8 +735,7 @@ class CloudantDatabaseActionsTests extends FlatSpec
                 assetHelper.withCleaner(wsk.pkg, packageName) {
                     (pkg, name) =>
                         pkg.bind("/whisk.system/cloudant", name,
-                            Map("username" -> credential.user.toJson,
-                                "password" -> credential.password.toJson,
+                            Map("iamApiKey" -> credential.apikey.toJson,
                                 "host" -> credential.host().toJson,
                                 "dbname" -> credential.dbname.toJson))
                 }
@@ -792,8 +774,7 @@ class CloudantDatabaseActionsTests extends FlatSpec
                 assetHelper.withCleaner(wsk.pkg, packageName) {
                     (pkg, name) =>
                         pkg.bind("/whisk.system/cloudant", name,
-                            Map("username" -> credential.user.toJson,
-                                "password" -> credential.password.toJson,
+                            Map("iamApiKey" -> credential.apikey.toJson,
                                 "host" -> credential.host().toJson,
                                 "dbname" -> credential.dbname.substring(1).toJson))
                 }
@@ -827,8 +808,7 @@ class CloudantDatabaseActionsTests extends FlatSpec
                 assetHelper.withCleaner(wsk.pkg, packageName) {
                     (pkg, name) =>
                         pkg.bind("/whisk.system/cloudant", name,
-                            Map("username" -> credential.user.toJson,
-                                "password" -> credential.password.toJson,
+                            Map("iamApiKey" -> credential.apikey.toJson,
                                 "host" -> credential.host().toJson,
                                 "dbname" -> credential.dbname.toJson))
                 }
@@ -868,8 +848,7 @@ class CloudantDatabaseActionsTests extends FlatSpec
                 assetHelper.withCleaner(wsk.pkg, packageName) {
                     (pkg, name) =>
                         pkg.bind("/whisk.system/cloudant", name,
-                            Map("username" -> credential.user.toJson,
-                                "password" -> credential.password.toJson,
+                            Map("iamApiKey" -> credential.apikey.toJson,
                                 "host" -> credential.host().toJson,
                                 "dbname" -> credential.dbname.toJson))
                 }
@@ -919,8 +898,7 @@ class CloudantDatabaseActionsTests extends FlatSpec
                 assetHelper.withCleaner(wsk.pkg, packageName) {
                     (pkg, name) =>
                         pkg.bind("/whisk.system/cloudant", name,
-                            Map("username" -> credential.user.toJson,
-                                "password" -> credential.password.toJson,
+                            Map("iamApiKey" -> credential.apikey.toJson,
                                 "host" -> credential.host().toJson,
                                 "dbname" -> credential.dbname.toJson))
                 }
@@ -966,8 +944,7 @@ class CloudantDatabaseActionsTests extends FlatSpec
                 assetHelper.withCleaner(wsk.pkg, packageName) {
                     (pkg, name) =>
                         pkg.bind("/whisk.system/cloudant", name,
-                            Map("username" -> credential.user.toJson,
-                                "password" -> credential.password.toJson,
+                            Map("iamApiKey" -> credential.apikey.toJson,
                                 "host" -> credential.host().toJson,
                                 "dbname" -> credential.dbname.toJson))
                 }
@@ -1015,8 +992,7 @@ class CloudantDatabaseActionsTests extends FlatSpec
                 assetHelper.withCleaner(wsk.pkg, packageName) {
                     (pkg, name) =>
                         pkg.bind("/whisk.system/cloudant", name,
-                            Map("username" -> credential.user.toJson,
-                                "password" -> credential.password.toJson,
+                            Map("iamApiKey" -> credential.apikey.toJson,
                                 "host" -> credential.host().toJson,
                                 "dbname" -> credential.dbname.toJson))
                 }
@@ -1061,8 +1037,7 @@ class CloudantDatabaseActionsTests extends FlatSpec
                 assetHelper.withCleaner(wsk.pkg, packageName) {
                     (pkg, name) =>
                         pkg.bind("/whisk.system/cloudant", name,
-                            Map("username" -> credential.user.toJson,
-                                "password" -> credential.password.toJson,
+                            Map("iamApiKey" -> credential.apikey.toJson,
                                 "host" -> credential.host().toJson,
                                 "dbname" -> credential.dbname.toJson))
                 }
@@ -1107,8 +1082,7 @@ class CloudantDatabaseActionsTests extends FlatSpec
                 assetHelper.withCleaner(wsk.pkg, packageName) {
                     (pkg, name) =>
                         pkg.bind("/whisk.system/cloudant", name,
-                            Map("username" -> credential.user.toJson,
-                                "password" -> credential.password.toJson,
+                            Map("iamApiKey" -> credential.apikey.toJson,
                                 "host" -> credential.host().toJson,
                                 "dbname" -> credential.dbname.toJson))
                 }
@@ -1149,8 +1123,7 @@ class CloudantDatabaseActionsTests extends FlatSpec
                 assetHelper.withCleaner(wsk.pkg, packageName) {
                     (pkg, name) =>
                         pkg.bind("/whisk.system/cloudant", name,
-                            Map("username" -> credential.user.toJson,
-                                "password" -> credential.password.toJson,
+                            Map("iamApiKey" -> credential.apikey.toJson,
                                 "host" -> credential.host().toJson,
                                 "dbname" -> credential.dbname.toJson))
                 }
@@ -1194,8 +1167,7 @@ class CloudantDatabaseActionsTests extends FlatSpec
                 assetHelper.withCleaner(wsk.pkg, packageName) {
                     (pkg, name) =>
                         pkg.bind("/whisk.system/cloudant", name,
-                            Map("username" -> credential.user.toJson,
-                                "password" -> credential.password.toJson,
+                            Map("iamApiKey" -> credential.apikey.toJson,
                                 "host" -> credential.host().toJson,
                                 "dbname" -> credential.dbname.toJson))
                 }
@@ -1230,8 +1202,7 @@ class CloudantDatabaseActionsTests extends FlatSpec
                 assetHelper.withCleaner(wsk.pkg, packageName) {
                     (pkg, name) =>
                         pkg.bind("/whisk.system/cloudant", name,
-                            Map("username" -> credential.user.toJson,
-                                "password" -> credential.password.toJson,
+                            Map("iamApiKey" -> credential.apikey.toJson,
                                 "host" -> credential.host().toJson,
                                 "dbname" -> credential.dbname.toJson))
                 }
@@ -1273,8 +1244,7 @@ class CloudantDatabaseActionsTests extends FlatSpec
                 assetHelper.withCleaner(wsk.pkg, packageName) {
                     (pkg, name) =>
                         pkg.bind("/whisk.system/cloudant", name,
-                            Map("username" -> credential.user.toJson,
-                                "password" -> credential.password.toJson,
+                            Map("iamApiKey" -> credential.apikey.toJson,
                                 "host" -> credential.host().toJson,
                                 "dbname" -> credential.dbname.toJson))
                 }
@@ -1319,8 +1289,7 @@ class CloudantDatabaseActionsTests extends FlatSpec
                 assetHelper.withCleaner(wsk.pkg, packageName) {
                     (pkg, name) =>
                         pkg.bind("/whisk.system/cloudant", name,
-                            Map("username" -> credential.user.toJson,
-                                "password" -> credential.password.toJson,
+                            Map("iamApiKey" -> credential.apikey.toJson,
                                 "host" -> credential.host().toJson,
                                 "dbname" -> credential.dbname.toJson))
                 }
@@ -1361,8 +1330,7 @@ class CloudantDatabaseActionsTests extends FlatSpec
                 assetHelper.withCleaner(wsk.pkg, packageName) {
                     (pkg, name) =>
                         pkg.bind("/whisk.system/cloudant", name,
-                            Map("username" -> credential.user.toJson,
-                                "password" -> credential.password.toJson,
+                            Map("iamApiKey" -> credential.apikey.toJson,
                                 "host" -> credential.host().toJson,
                                 "dbname" -> credential.dbname.toJson))
                 }
@@ -1425,7 +1393,7 @@ class CloudantDatabaseActionsTests extends FlatSpec
                     activation =>
                         activation.response.success shouldBe false
                         val result = activation.response.result.get
-                        result.fields.get("error") shouldBe Some(JsString("cloudant account password is required."))
+                        result.fields.get("error") shouldBe Some(JsString("You must specify parameter/s of iamApiKey or username/password"))
                 }
             }
             finally {
@@ -1449,8 +1417,7 @@ class CloudantDatabaseActionsTests extends FlatSpec
                 assetHelper.withCleaner(wsk.pkg, packageName) {
                     (pkg, name) =>
                         pkg.bind("/whisk.system/cloudant", name,
-                            Map("username" -> credential.user.toJson,
-                                "password" -> credential.password.toJson,
+                            Map("iamApiKey" -> credential.apikey.toJson,
                                 "host" -> credential.host().toJson,
                                 "dbname" -> credential.dbname.toJson))
                 }
@@ -1490,8 +1457,7 @@ class CloudantDatabaseActionsTests extends FlatSpec
                 assetHelper.withCleaner(wsk.pkg, packageName) {
                     (pkg, name) =>
                         pkg.bind("/whisk.system/cloudant", name,
-                            Map("username" -> credential.user.toJson,
-                                "password" -> credential.password.toJson,
+                            Map("iamApiKey" -> credential.apikey.toJson,
                                 "host" -> credential.host().toJson))
                 }
 
@@ -1528,8 +1494,7 @@ class CloudantDatabaseActionsTests extends FlatSpec
                 assetHelper.withCleaner(wsk.pkg, packageName) {
                     (pkg, name) =>
                         pkg.bind("/whisk.system/cloudant", name,
-                            Map("username" -> credential.user.toJson,
-                                "password" -> credential.password.toJson,
+                            Map("iamApiKey" -> credential.apikey.toJson,
                                 "host" -> credential.host().toJson,
                                 "dbname" -> credential.dbname.toJson))
                 }
@@ -1579,8 +1544,7 @@ class CloudantDatabaseActionsTests extends FlatSpec
                 assetHelper.withCleaner(wsk.pkg, packageName) {
                     (pkg, name) =>
                         pkg.bind("/whisk.system/cloudant", name,
-                            Map("username" -> credential.user.toJson,
-                                "password" -> credential.password.toJson,
+                            Map("iamApiKey" -> credential.apikey.toJson,
                                 "host" -> credential.host().toJson,
                                 "dbname" -> credential.dbname.toJson))
                 }
@@ -1626,8 +1590,7 @@ class CloudantDatabaseActionsTests extends FlatSpec
                 assetHelper.withCleaner(wsk.pkg, packageName) {
                     (pkg, name) =>
                         pkg.bind("/whisk.system/cloudant", name,
-                            Map("username" -> credential.user.toJson,
-                                "password" -> credential.password.toJson,
+                            Map("iamApiKey" -> credential.apikey.toJson,
                                 "host" -> credential.host().toJson,
                                 "dbname" -> credential.dbname.toJson))
                 }
@@ -1674,8 +1637,7 @@ class CloudantDatabaseActionsTests extends FlatSpec
                 assetHelper.withCleaner(wsk.pkg, packageName) {
                     (pkg, name) =>
                         pkg.bind("/whisk.system/cloudant", name,
-                            Map("username" -> credential.user.toJson,
-                                "password" -> credential.password.toJson,
+                            Map("iamApiKey" -> credential.apikey.toJson,
                                 "host" -> credential.host().toJson,
                                 "dbname" -> credential.dbname.toJson))
                 }
@@ -1713,8 +1675,7 @@ class CloudantDatabaseActionsTests extends FlatSpec
                 assetHelper.withCleaner(wsk.pkg, packageName) {
                     (pkg, name) =>
                         pkg.bind("/whisk.system/cloudant", name,
-                            Map("username" -> credential.user.toJson,
-                                "password" -> credential.password.toJson,
+                            Map("iamApiKey" -> credential.apikey.toJson,
                                 "host" -> credential.host().toJson,
                                 "dbname" -> credential.dbname.toJson))
                 }
@@ -1765,8 +1726,7 @@ class CloudantDatabaseActionsTests extends FlatSpec
                 assetHelper.withCleaner(wsk.pkg, packageName) {
                     (pkg, name) =>
                         pkg.bind("/whisk.system/cloudant", name,
-                            Map("username" -> credential.user.toJson,
-                                "password" -> credential.password.toJson,
+                            Map("iamApiKey" -> credential.apikey.toJson,
                                 "host" -> credential.host().toJson,
                                 "dbname" -> credential.dbname.toJson))
                 }
@@ -1810,8 +1770,7 @@ class CloudantDatabaseActionsTests extends FlatSpec
                 assetHelper.withCleaner(wsk.pkg, packageName) {
                     (pkg, name) =>
                         pkg.bind("/whisk.system/cloudant", name,
-                            Map("username" -> credential.user.toJson,
-                                "password" -> credential.password.toJson,
+                            Map("iamApiKey" -> credential.apikey.toJson,
                                 "host" -> credential.host().toJson,
                                 "dbname" -> credential.dbname.toJson))
                 }
@@ -1857,8 +1816,7 @@ class CloudantDatabaseActionsTests extends FlatSpec
                 assetHelper.withCleaner(wsk.pkg, packageName) {
                     (pkg, name) =>
                         pkg.bind("/whisk.system/cloudant", name,
-                            Map("username" -> credential.user.toJson,
-                                "password" -> credential.password.toJson,
+                            Map("iamApiKey" -> credential.apikey.toJson,
                                 "host" -> credential.host().toJson,
                                 "dbname" -> credential.dbname.toJson))
                 }

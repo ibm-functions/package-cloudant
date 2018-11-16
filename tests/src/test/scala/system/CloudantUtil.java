@@ -40,6 +40,7 @@ public class CloudantUtil {
     public static final String USER_PROPERTY = "user";
     public static final String PWD_PROPERTY = "password";
     public static final String DBNAME_PROPERTY = "dbname";
+    public static final String APIKEY_PROPERTY = "apikey";
     public static final String DOC_ID = "testId";
 
     /**
@@ -68,19 +69,21 @@ public class CloudantUtil {
         public final String user;
         public final String password;
         public final String dbname;
+        public final String apikey;
 
         public String host() {
             return user + ".cloudant.com";
         }
 
-        public Credential(String user, String password, String dbname) {
+        public Credential(String user, String password, String apikey, String dbname) {
             this.user = user;
             this.password = password;
+            this.apikey = apikey;
             this.dbname = dbname;
         }
 
         public Credential(Properties props) {
-            this(props.getProperty(USER_PROPERTY), props.getProperty(PWD_PROPERTY), props.getProperty(DBNAME_PROPERTY));
+            this(props.getProperty(USER_PROPERTY), props.getProperty(PWD_PROPERTY), props.getProperty(APIKEY_PROPERTY), props.getProperty(DBNAME_PROPERTY));
         }
 
         public static Credential makeFromVCAPFile(String vcapService, String dbNamePrefix) {
@@ -91,10 +94,13 @@ public class CloudantUtil {
             Map<String,String> credentials = TestUtils.getVCAPcredentials(vcapService);
             String username = credentials.get("username");
             String password = credentials.get("password");
+            String apikey = credentials.get("apikey");
             Properties props = new Properties();
             props.setProperty(USER_PROPERTY, username);
             props.setProperty(PWD_PROPERTY, password);
+            props.setProperty(APIKEY_PROPERTY, apikey);
             props.setProperty(DBNAME_PROPERTY, dbname);
+
             return new Credential(props);
         }
 

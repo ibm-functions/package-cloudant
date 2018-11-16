@@ -62,11 +62,6 @@ $WSK_CLI -i --apihost "$APIHOST" action update --kind "$ACTION_RUNTIME_VERSION" 
     "$PACKAGE_HOME/account-actions/list-all-databases.js" \
     -a description 'List all Cloudant databases'
 
-$WSK_CLI -i --apihost "$APIHOST" action update --kind "$ACTION_RUNTIME_VERSION" --auth "$AUTH" cloudant/read-updates-feed \
-    "$PACKAGE_HOME/account-actions/read-updates-feed.js" \
-    -a description 'Read updates feed from Cloudant account (non-continuous)' \
-    -a parameters '[ {"name":"dbname", "required":true}, {"name":"params", "required":false} ]'
-
 # Cloudant database actions
 
 $WSK_CLI -i --apihost "$APIHOST" action update --kind "$ACTION_RUNTIME_VERSION" --auth "$AUTH" cloudant/create-document \

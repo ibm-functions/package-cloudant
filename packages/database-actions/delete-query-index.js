@@ -3,80 +3,118 @@
  * https://docs.cloudant.com/cloudant_query.html#deleting-an-index
  **/
 
-var DESIGN_PREFIX = '_design/';
 
-function main(message) {
-  var cloudantOrError = getCloudantAccount(message);
-  if (typeof cloudantOrError !== 'object') {
-    return Promise.reject(cloudantOrError);
-  }
-  var cloudant = cloudantOrError;
-  var dbName = message.dbname;
-  var docId = message.docid;
-  var indexName = message.indexname;
-  var indexType = message.indextype;
+function main(params) {
 
-  if (!dbName) {
-    return Promise.reject('dbname is required.');
-  }
-  if (!docId) {
-    return Promise.reject('docid is required.');
-  }
-  if (!indexName) {
-    return Promise.reject('indexname is required.');
-  }
-  if (!indexType) {
-    return Promise.reject('indextype is required.');
-  }
+    var cloudantOrError = getCloudantAccount(params);
+    if (typeof cloudantOrError !== 'object') {
+        return Promise.reject(cloudantOrError);
+    }
+    var cloudant = cloudantOrError;
 
-  return deleteIndexFromDesignDoc(cloudant, docId, indexName, indexType, dbName);
+    var dbName = params.dbname;
+    var docId = params.docid;
+    var indexName = params.indexname;
+    var indexType = params.indextype;
+
+    if (!dbName) {
+        return Promise.reject('dbname is required.');
+    }
+    if (!docId) {
+        return Promise.reject('docid is required.');
+    }
+    if (!indexName) {
+        return Promise.reject('indexname is required.');
+    }
+    if (!indexType) {
+        return Promise.reject('indextype is required.');
+    }
+
+    return deleteIndexFromDesignDoc(cloudant, docId, indexName, indexType, dbName);
 }
 
 function deleteIndexFromDesignDoc(cloudant, docId, indexName, indexType, dbName) {
 
-  return new Promise(function(resolve, reject) {
-    var path = "_index/" + encodeURIComponent(docId) + '/' + encodeURIComponent(indexType) +
-        '/' + encodeURIComponent(indexName);
+    return new Promise(function (resolve, reject) {
+        var path = "_index/" + encodeURIComponent(docId) + '/' + encodeURIComponent(indexType) +
+            '/' + encodeURIComponent(indexName);
 
-    cloudant.request({ db: encodeURIComponent(dbName),
-        method : 'delete',
-        path : path
-      }, function(error, response) {
-      if (!error) {
-        console.log('success', response);
-        resolve(response);
-      } else {
-        console.log('error', error);
-        reject(error);
-      }
+        cloudant.request({
+            db: encodeURIComponent(dbName),
+            method: 'delete',
+            path: path
+        }, function (error, response) {
+            if (!error) {
+                console.log('success', response);
+                resolve(response);
+            } else {
+                console.log('error', error);
+                reject(error);
+            }
+        });
+
     });
-
-  });
 }
 
-function getCloudantAccount(message) {
-  // full cloudant URL - Cloudant NPM package has issues creating valid URLs
-  // when the username contains dashes (common in Bluemix scenarios)
-  var cloudantUrl;
+function getCloudantAccount(params) {
 
-  if (message.url) {
-    // use bluemix binding
-    cloudantUrl = message.url;
-  } else {
-    if (!message.host) {
-      return 'cloudant account host is required.';
+    var Cloudant = require('@cloudant/cloudant');
+    var cloudant;
+
+    if (!params.iamApiKey && params.url) {
+        cloudant = Cloudant(params.url);
+    } else {
+        checkForBXCreds(params);
+
+        if (!params.host) {
+            return 'Cloudant account host is required.';
+        }
+
+        if (!params.iamApiKey) {
+            if (!params.username || !params.password) {
+                return 'You must specify parameter/s of iamApiKey or username/password';
+            }
+        }
+
+        var protocol = params.protocol || 'https';
+        if (params.iamApiKey) {
+            var dbURL = `${protocol}://${params.host}`;
+            if (params.port) {
+                dbURL += ':' + params.port;
+            }
+            cloudant = new Cloudant({
+                url: dbURL,
+                plugins: {iamauth: {iamApiKey: params.iamApiKey, iamTokenUrl: params.iamUrl}}
+            });
+        } else {
+            var url = `${protocol}://${params.username}:${params.password}@${params.host}`;
+            if (params.port) {
+                url += ':' + params.port;
+            }
+            cloudant = Cloudant(url);
+        }
     }
-    if (!message.username) {
-      return 'cloudant account username is required.';
-    }
-    if (!message.password) {
-      return 'cloudant account password is required.';
+    return cloudant;
+}
+
+function checkForBXCreds(params) {
+
+    if (params.__bx_creds && params.__bx_creds.cloudantNoSQLDB) {
+        var cloudantCreds = params.__bx_creds.cloudantNoSQLDB;
+
+        if (!params.host) {
+            params.host = cloudantCreds.host || (cloudantCreds.username + '.cloudant.com');
+        }
+        if (!params.iamApiKey && !cloudantCreds.apikey) {
+            if (!params.username) {
+                params.username = cloudantCreds.username;
+            }
+            if (!params.password) {
+                params.password = cloudantCreds.password;
+            }
+        } else if (!params.iamApiKey) {
+            params.iamApiKey = cloudantCreds.apikey;
+        }
     }
 
-    cloudantUrl = "https://" + message.username + ":" + message.password + "@" + message.host;
-  }
-
-  return require('cloudant')({
-    url: cloudantUrl
-  });
 }
