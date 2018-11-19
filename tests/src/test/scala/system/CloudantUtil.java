@@ -45,8 +45,9 @@ public class CloudantUtil {
 
     /**
      * The root of the Cloudant installation.
+     *
      */
-    private static final String CLOUDANT_INSTALL_FILE = "installCatalog.sh";
+    private static final String CLOUDANT_README_FILE = "README.md";
     private static final String CLOUDANT_HOME = getCloudantHome();
     public static final File ATTACHMENT_FILE_PATH = getFileRelativeToCloudantHome("tests/dat/attach.txt");
     public static final File INDEX_DDOC_PATH = getFileRelativeToCloudantHome("tests/dat/indexdesigndoc.txt");
@@ -389,7 +390,7 @@ public class CloudantUtil {
 
         if (dir != null) {
             // Look in the directory tree recursively.
-            File propfile = findFileRecursively(dir, CLOUDANT_INSTALL_FILE);
+            File propfile = findFileRecursively(dir, CLOUDANT_README_FILE);
             return propfile != null ? propfile.getParent() : null;
         } else return null;
     }
