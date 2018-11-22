@@ -93,8 +93,8 @@ function getCloudantAccount(params) {
 
 function checkForBXCreds(params) {
 
-    if (params.__bx_creds && params.__bx_creds.cloudantNoSQLDB) {
-        var cloudantCreds = params.__bx_creds.cloudantNoSQLDB;
+    if (params.__bx_creds && (params.__bx_creds.cloudantnosqldb || params.__bx_creds.cloudantNoSQLDB)) {
+        var cloudantCreds = params.__bx_creds.cloudantnosqldb || params.__bx_creds.cloudantNoSQLDB;
 
         if (!params.host) {
             params.host = cloudantCreds.host || (cloudantCreds.username + '.cloudant.com');
