@@ -18,7 +18,7 @@ fi
 
 AUTH="$1"
 APIHOST="$2"
-ACTION_RUNTIME_VERSION=${ACTION_RUNTIME_VERSION:="nodejs:8"}
+ACTION_RUNTIME_VERSION=${ACTION_RUNTIME_VERSION:="nodejs:10"}
 
 # If the auth key file exists, read the key in the file. Otherwise, take the
 # first argument as the key itself.
