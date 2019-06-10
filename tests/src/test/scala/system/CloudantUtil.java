@@ -19,8 +19,8 @@ package system;
 import com.cloudant.client.api.CloudantClient;
 import com.cloudant.client.api.Database;
 import com.google.gson.*;
-import com.jayway.restassured.response.Response;
 import common.TestUtils;
+import io.restassured.response.Response;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
@@ -30,7 +30,7 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.UUID;
 
-import static com.jayway.restassured.RestAssured.given;
+import static io.restassured.RestAssured.given;
 import static org.junit.Assert.assertTrue;
 
 /**
