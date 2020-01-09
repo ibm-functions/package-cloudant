@@ -54,7 +54,6 @@ function deleteAttachment(cloudantDb, docId, attName, params) {
     return new Promise(function (resolve, reject) {
         cloudantDb.attachment.destroy(docId, attName, params, function (error, response) {
             if (!error) {
-                console.log("success", response);
                 resolve(response);
             } else {
                 console.log("error", error);

@@ -50,7 +50,6 @@ function deleteViewFromDesignDoc(cloudantDb, docId, viewName, params) {
 
     return getDocument(cloudantDb, docId)
     .then(function (document) {
-        console.log("Got document: " + document);
         delete document.views[viewName];
 
         //Update the design document after removing the view
@@ -62,7 +61,6 @@ function getDocument(cloudantDb, docId) {
     return new Promise(function (resolve, reject) {
         cloudantDb.get(docId, function (error, response) {
             if (!error) {
-                console.log("Got response: " + response);
                 resolve(response);
             } else {
                 console.log("Got error: " + error);
@@ -76,7 +74,6 @@ function insert(cloudantDb, doc, params) {
     return new Promise(function (resolve, reject) {
         cloudantDb.insert(doc, params, function (error, response) {
             if (!error) {
-                console.log('success', response);
                 resolve(response);
             } else {
                 console.log('error', error);

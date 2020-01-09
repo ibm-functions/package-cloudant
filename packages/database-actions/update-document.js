@@ -55,7 +55,6 @@ function insert(cloudantDb, doc, params) {
     return new Promise(function (resolve, reject) {
         cloudantDb.insert(doc, params, function (error, response) {
             if (!error) {
-                console.log('success', response);
                 resolve(response);
             } else {
                 console.log('error', error);

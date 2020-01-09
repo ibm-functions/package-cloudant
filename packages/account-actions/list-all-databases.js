@@ -18,7 +18,6 @@ function listAllDatabases(cloudant) {
     return new Promise(function (resolve, reject) {
         cloudant.db.list(function (error, response) {
             if (!error) {
-                console.log('success', response);
                 //Response is an array and only JSON objects can be passed
                 var responseObj = {};
                 responseObj.all_databases = response;

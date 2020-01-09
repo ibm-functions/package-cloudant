@@ -23,7 +23,6 @@ function destroyDatabase(cloudant, dbName) {
     return new Promise(function (resolve, reject) {
         cloudant.db.destroy(dbName, function (error, response) {
             if (!error) {
-                console.log('success', response);
                 resolve(response);
             } else {
                 console.log('error', error);

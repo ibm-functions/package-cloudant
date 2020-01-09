@@ -24,7 +24,6 @@ function createDatabase(cloudant, dbName) {
     return new Promise(function (resolve, reject) {
         cloudant.db.create(dbName, function (error, response) {
             if (!error) {
-                console.log('success', response);
                 resolve(response);
             } else {
                 console.log('error', error);

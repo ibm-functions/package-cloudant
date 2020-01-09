@@ -47,7 +47,6 @@ function queryView(cloudantDb, designDocId, designDocViewName, params) {
     return new Promise(function (resolve, reject) {
         cloudantDb.view(designDocId, designDocViewName, params, function (error, response) {
             if (!error) {
-                console.log('success', response);
                 resolve(response);
             } else {
                 console.error('error', error);

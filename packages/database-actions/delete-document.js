@@ -37,7 +37,6 @@ function destroy(cloudantDb, docId, docRev) {
     return new Promise(function (resolve, reject) {
         cloudantDb.destroy(docId, docRev, function (error, response) {
             if (!error) {
-                console.log('success', response);
                 resolve(response);
             } else {
                 console.error('error', error);

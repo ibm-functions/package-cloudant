@@ -25,7 +25,6 @@ function index(cloudantDb) {
     return new Promise(function (resolve, reject) {
         cloudantDb.index(function (error, response) {
             if (!error) {
-                console.log('success', response);
                 resolve(response);
             } else {
                 console.log('error', error);

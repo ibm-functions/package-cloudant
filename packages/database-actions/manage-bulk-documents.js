@@ -54,7 +54,6 @@ function bulk(cloudantDb, docs, params) {
             if (!error) {
                 var responseDocs = {};
                 responseDocs.docs = response;
-                console.log('success', response);
                 resolve(responseDocs);
             } else {
                 console.log('Error: ', error);
