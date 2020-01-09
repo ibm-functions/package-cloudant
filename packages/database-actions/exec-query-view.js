@@ -49,6 +49,7 @@ function queryView(cloudantDb, designDocId, designDocViewName, params) {
             if (!error) {
                 resolve(response);
             } else {
+                console.error('error', error);
                 reject(error);
             }
         });

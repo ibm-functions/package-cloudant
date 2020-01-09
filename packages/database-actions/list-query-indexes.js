@@ -27,6 +27,7 @@ function index(cloudantDb) {
             if (!error) {
                 resolve(response);
             } else {
+                console.log('error', error);
                 reject(error);
             }
         });

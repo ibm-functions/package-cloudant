@@ -63,6 +63,7 @@ function getDocument(cloudantDb, docId) {
             if (!error) {
                 resolve(response);
             } else {
+                console.log("Got error: " + error);
                 reject(error);
             }
         });
@@ -75,6 +76,7 @@ function insert(cloudantDb, doc, params) {
             if (!error) {
                 resolve(response);
             } else {
+                console.log('error', error);
                 reject(error);
             }
         });

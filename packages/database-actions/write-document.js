@@ -72,6 +72,7 @@ function insertOrUpdate(cloudantDb, overwrite, doc) {
                                     reject(err);
                                 });
                         } else {
+                            console.error('error', error);
                             reject(error);
                         }
                     }
@@ -96,6 +97,7 @@ function insert(cloudantDb, doc) {
             if (!error) {
                 resolve(response);
             } else {
+                console.log('error', error);
                 reject(error);
             }
         });

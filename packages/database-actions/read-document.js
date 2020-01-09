@@ -42,6 +42,7 @@ function readDocument(cloudantDb, docId, params) {
             if (!error) {
                 resolve(response);
             } else {
+                console.error('error', error);
                 reject(error);
             }
         });

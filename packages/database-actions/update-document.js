@@ -57,6 +57,7 @@ function insert(cloudantDb, doc, params) {
             if (!error) {
                 resolve(response);
             } else {
+                console.log('error', error);
                 reject(error);
             }
         });

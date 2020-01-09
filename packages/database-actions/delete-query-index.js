@@ -47,6 +47,7 @@ function deleteIndexFromDesignDoc(cloudant, docId, indexName, indexType, dbName)
             if (!error) {
                 resolve(response);
             } else {
+                console.log('error', error);
                 reject(error);
             }
         });

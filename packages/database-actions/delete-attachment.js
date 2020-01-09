@@ -56,6 +56,7 @@ function deleteAttachment(cloudantDb, docId, attName, params) {
             if (!error) {
                 resolve(response);
             } else {
+                console.log("error", error);
                 reject(error);
             }
         });

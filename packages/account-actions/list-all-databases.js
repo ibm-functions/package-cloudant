@@ -23,6 +23,7 @@ function listAllDatabases(cloudant) {
                 responseObj.all_databases = response;
                 resolve(responseObj);
             } else {
+                console.log('error', error);
                 reject(error);
             }
         });

@@ -37,6 +37,7 @@ function changes(cloudant, dbName, params) {
             if (!error) {
                 resolve(response);
             } else {
+                console.error('error', error);
                 reject(error);
             }
         });

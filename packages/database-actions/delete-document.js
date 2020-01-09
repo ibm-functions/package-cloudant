@@ -39,6 +39,7 @@ function destroy(cloudantDb, docId, docRev) {
             if (!error) {
                 resolve(response);
             } else {
+                console.error('error', error);
                 reject(error);
             }
         });

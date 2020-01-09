@@ -31,6 +31,7 @@ function createIndex(cloudantDb, index) {
             if (!error) {
                 resolve(response);
             } else {
+                console.log('error', error);
                 reject(response);
             }
         });

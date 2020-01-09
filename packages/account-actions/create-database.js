@@ -26,6 +26,7 @@ function createDatabase(cloudant, dbName) {
             if (!error) {
                 resolve(response);
             } else {
+                console.log('error', error);
                 reject(error);
             }
         });

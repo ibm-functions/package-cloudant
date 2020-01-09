@@ -61,6 +61,7 @@ function insert(cloudantDb, docId, attName, att, contentType, params) {
             if (!error) {
                 resolve(response);
             } else {
+                console.log("error", error);
                 reject(error);
             }
         });
