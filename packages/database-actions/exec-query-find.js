@@ -79,7 +79,9 @@ function getCloudantAccount(params) {
             }
             cloudant = new Cloudant({
                 url: dbURL,
-                plugins: {iamauth: {iamApiKey: params.iamApiKey, iamTokenUrl: params.iamUrl}}
+                // Only pass iamTokenUrl when params.iamUrl is defined and not empty. Otherwise
+                // we get 'Error: options.uri is a required argument' for @cloudant/cloudant@4.3.1.
+                plugins: {iamauth: {iamApiKey: params.iamApiKey, ...(params.iamUrl && {iamTokenUrl: params.iamUrl}) }}
             });
         } else {
             var url = `${protocol}://${params.username}:${params.password}@${params.host}`;
