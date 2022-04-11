@@ -295,7 +295,9 @@ class CloudantAccountActionsTests extends FlatSpec
                     activation =>
                         activation.response.success shouldBe false
                         val result = activation.response.result.get
-                        JsHelpers.getFieldPath(result, "error", "statusCode") shouldBe Some(JsNumber(401))
+                        println("result=" + result)
+                        JsHelpers.getFieldPath(result, "error", "statusCode") shouldBe Some(JsNumber(400))
+                        JsHelpers.getFieldPath(result, "error", "response", "statusCode") shouldBe Some(JsNumber(400))
                 }
             }
             finally {

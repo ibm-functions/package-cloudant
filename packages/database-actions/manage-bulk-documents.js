@@ -56,8 +56,18 @@ function bulk(cloudantDb, docs, params) {
                 responseDocs.docs = response;
                 resolve(responseDocs);
             } else {
+                // @cloudant/cloudant@3.0.2 returns statusCode at error.statusCode
+                // @cloudant/cloudant@4.3.1 returns statusCode at error.response.statusCode
+                // For @cloudant/cloudant@4.3.1 try to return an additional @cloudant/cloudant@3.0.2 compatible statusCode.
+                // If there is no error.statusCode, yet, and there is an error.response object and there is an
+                // error.response.statusCode then make this also available as error.statusCode.
+                error.statusCode = (!error.statusCode && error.response && error.response.statusCode) || error.statusCode;
+
                 console.log('Error: ', error);
-                reject(error);
+
+                // Return a plain error object with strings only. Otherwise the serialize-error would explode
+                // the response with to much detail for @cloudant/cloudant@4.3.1.
+                reject(JSON.parse(JSON.stringify(error)));
             }
         });
     });
