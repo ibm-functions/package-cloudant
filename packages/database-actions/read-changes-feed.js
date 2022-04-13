@@ -37,8 +37,18 @@ function changes(cloudant, dbName, params) {
             if (!error) {
                 resolve(response);
             } else {
-                console.error('error', error);
-                reject(error);
+                // @cloudant/cloudant@3.0.2 returns statusCode at error.statusCode
+                // @cloudant/cloudant@4.3.1 returns statusCode at error.response.statusCode
+                // For @cloudant/cloudant@4.3.1 try to return an additional @cloudant/cloudant@3.0.2 compatible statusCode.
+                // If there is no error.statusCode, yet, and there is an error.response object and there is an
+                // error.response.statusCode then make this also available as error.statusCode.
+                error.statusCode = (!error.statusCode && error.response && error.response.statusCode) || error.statusCode;
+
+                console.error('Error: ', error);
+
+                // Return a plain error object with strings only. Otherwise the serialize-error would explode
+                // the response with to much detail for @cloudant/cloudant@4.3.1.
+                reject(JSON.parse(JSON.stringify(error)));
             }
         });
     });
@@ -72,7 +82,9 @@ function getCloudantAccount(params) {
             }
             cloudant = new Cloudant({
                 url: dbURL,
-                plugins: {iamauth: {iamApiKey: params.iamApiKey, iamTokenUrl: params.iamUrl}}
+                // Only pass iamTokenUrl when params.iamUrl is defined and not empty. Otherwise
+                // we get 'Error: options.uri is a required argument' for @cloudant/cloudant@4.3.1.
+                plugins: {iamauth: {iamApiKey: params.iamApiKey, ...(params.iamUrl && {iamTokenUrl: params.iamUrl}) }}
             });
         } else {
             var url = `${protocol}://${params.username}:${params.password}@${params.host}`;
